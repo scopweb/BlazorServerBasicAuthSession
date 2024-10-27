@@ -1,0 +1,21 @@
+﻿@page "/"
+@inject ISessionService SessionService
+@inject NavigationManager NavigationManagers
+
+<AuthorizeView>
+    <PageTitle>Home</PageTitle>
+    <h1>Home</h1>   
+</AuthorizeView>
+    
+
+@code {
+    private int currentCount = 0;
+
+    protected override void OnInitialized()
+    {
+        if (!SessionService.IsAuthenticated())
+        {
+            NavigationManagers.NavigateTo("/login", true);
+        }
+    }
+}

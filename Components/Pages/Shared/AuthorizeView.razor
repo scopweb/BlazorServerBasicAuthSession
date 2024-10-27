@@ -1,0 +1,28 @@
+﻿@inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthService
+
+@if (AuthService.IsAuthenticated())
+{
+    @ChildContent
+}
+else
+{
+    @if (!NavigationManager.Uri.EndsWith("/login", StringComparison.OrdinalIgnoreCase))
+    {
+        <div class="alert alert-warning">
+            <p>Debe iniciar sesión para acceder a esta página.</p>
+            <button class="btn btn-primary" @onclick="RedirectToLogin">Ir al Login</button>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private void RedirectToLogin()
+    {
+        var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(returnUrl)}", true);
+    }
+}
